@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { QuizList } from '../QuizList/QuizList';
 import { QuizEditor } from '../QuizEditor/QuizEditor';
 import { getQuizzes, saveQuizzes } from '../../utils/storage';
+import { nanoid } from 'nanoid';
 
 export interface Question {
-  id: number;
+  id: string;
   questionText: string;
   answers: string[];
   correctAnswerIndex: number;
 }
 
 export interface Quiz {
-  id: number;
+  id: string;
   title: string;
   questions: Question[];
 }
 
-export const QuizManager: React.FC = () => {
+export const QuizManager: FC = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
 
@@ -27,7 +28,7 @@ export const QuizManager: React.FC = () => {
 
   const addQuiz = () => {
     const newQuiz: Quiz = {
-      id: Date.now(),
+      id: nanoid(),
       title: '',
       questions: [],
     };
@@ -43,7 +44,7 @@ export const QuizManager: React.FC = () => {
     setEditingQuiz(null);
   };
 
-  const deleteQuiz = (quizId: number) => {
+  const deleteQuiz = (quizId: string) => {
     const updatedQuizzes = quizzes.filter(q => q.id !== quizId);
     setQuizzes(updatedQuizzes);
     saveQuizzes(updatedQuizzes);
@@ -55,14 +56,21 @@ export const QuizManager: React.FC = () => {
         <QuizEditor quiz={editingQuiz} saveQuiz={saveQuiz} />
       ) : (
         <div>
-          <button onClick={addQuiz} className="btn">
-            Add Quiz
+          <button
+            onClick={addQuiz}
+            className="mb-4 h-12 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+          >
+            Create new quiz
           </button>
-          <QuizList
-            quizzes={quizzes}
-            editQuiz={setEditingQuiz}
-            deleteQuiz={deleteQuiz}
-          />
+          {quizzes.length === 0 ? (
+            <div>There are currently no quizzes</div>
+          ) : (
+            <QuizList
+              quizzes={quizzes}
+              editQuiz={setEditingQuiz}
+              deleteQuiz={deleteQuiz}
+            />
+          )}
         </div>
       )}
     </div>
