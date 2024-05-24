@@ -4,9 +4,11 @@
   "private": true,
   "homepage": "https://Movash.github.io/luna-quiz/",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -17,7 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:js": "eslint src/**/*.{js,jsx}",
+    "lint:js": "eslint src/**/*.{js,jsx,ts,tsx}",
     "build:tailwind": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
     "dev": "concurrently \"npm start\" \"npm run build:tailwind\""
   },
@@ -41,6 +43,16 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "tailwindcss": "^3.4.3"
+    "eslint": "^8.57.0",
+    "eslint-config-react-app": "^7.0.1",
+    "lint-staged": "^15.2.2",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^4.9.5"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "npx prettier --write",
+      "npx eslint --fix"
+    ]
   }
 }
