@@ -3,10 +3,11 @@ import { Quiz } from '../components/QuizManager/QuizManager';
 const QUIZZES_KEY = 'quizzes';
 
 export const getQuizzes = (): Quiz[] => {
-  const quizzes = localStorage.getItem(QUIZZES_KEY);
-  return quizzes ? JSON.parse(quizzes) : [];
+  const quizzesState = localStorage.getItem(QUIZZES_KEY);
+  return quizzesState ? JSON.parse(quizzesState) : [];
 };
 
 export const saveQuizzes = (quizzes: Quiz[]): void => {
-  localStorage.setItem(QUIZZES_KEY, JSON.stringify(quizzes));
+  const quizzesState = JSON.stringify(quizzes);
+  localStorage.setItem(QUIZZES_KEY, quizzesState);
 };
