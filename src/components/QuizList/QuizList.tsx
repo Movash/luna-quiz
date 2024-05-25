@@ -5,12 +5,14 @@ interface QuizListProps {
   quizzes: Quiz[];
   editQuiz: (quiz: Quiz) => void;
   deleteQuiz: (quizId: string) => void;
+  runQuiz: (quiz: Quiz) => void;
 }
 
 export const QuizList: FC<QuizListProps> = ({
   quizzes,
   editQuiz,
   deleteQuiz,
+  runQuiz,
 }) => {
   return (
     <div>
@@ -28,6 +30,12 @@ export const QuizList: FC<QuizListProps> = ({
             className="font-medium h-12 w-24 bg-red-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-red-700"
           >
             Delete
+          </button>
+          <button
+            onClick={() => runQuiz(quiz)}
+            className="font-medium h-12 w-24 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+          >
+            Start Quiz
           </button>
         </div>
       ))}
