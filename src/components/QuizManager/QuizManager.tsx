@@ -1,6 +1,7 @@
 import { useState, useEffect, FC } from 'react';
 import { QuizList } from '../QuizList/QuizList';
 import { QuizEditor } from '../QuizEditor/QuizEditor';
+import { QuizRunner } from '../QuizRunner/QuizRunner';
 import { getQuizzes, saveQuizzes } from '../../utils/storage';
 import { nanoid } from 'nanoid';
 
@@ -20,6 +21,8 @@ export interface Quiz {
 export const QuizManager: FC = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
+  const [runningQuiz, setRunningQuiz] = useState<Quiz | null>(null);
+  const [quizResult, setQuizResult] = useState<number | null>(null);
 
   useEffect(() => {
     const storedQuizzes = getQuizzes();
@@ -50,10 +53,19 @@ export const QuizManager: FC = () => {
     saveQuizzes(updatedQuizzes);
   };
 
+  const handleCompleteQuiz = (score: number) => {
+    setRunningQuiz(null);
+    setQuizResult(score);
+  };
+
+  const currentRunningQuiz = runningQuiz;
+  console.log(runningQuiz)
   return (
     <div>
       {editingQuiz ? (
         <QuizEditor quiz={editingQuiz} saveQuiz={saveQuiz} />
+      ) : runningQuiz ? (
+        <QuizRunner quiz={runningQuiz} onComplete={handleCompleteQuiz} />
       ) : (
         <div>
           <button
@@ -69,7 +81,16 @@ export const QuizManager: FC = () => {
               quizzes={quizzes}
               editQuiz={setEditingQuiz}
               deleteQuiz={deleteQuiz}
+              runQuiz={setRunningQuiz}
             />
+          )}
+          {quizResult !== null && currentRunningQuiz && (
+            <div className="mt-4">
+              <h3>
+                Quiz Completed! Your Score: {quizResult} /{' '}
+                {currentRunningQuiz.questions.length}
+              </h3>
+            </div>
           )}
         </div>
       )}
