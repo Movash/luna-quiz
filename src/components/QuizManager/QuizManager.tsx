@@ -4,6 +4,8 @@ import { QuizEditor } from '../QuizEditor/QuizEditor';
 import { QuizRunner } from '../QuizRunner/QuizRunner';
 import { getQuizzes, saveQuizzes } from '../../utils/storage';
 import { nanoid } from 'nanoid';
+import { QuizResult } from '../QuizResult/QuizResult';
+import Loader from '../Loader/Loader';
 
 export interface Question {
   id: string;
@@ -24,10 +26,16 @@ export const QuizManager: FC = () => {
   const [runningQuiz, setRunningQuiz] = useState<Quiz | null>(null);
   const [completedQuiz, setCompletedQuiz] = useState<Quiz | null>(null);
   const [quizResult, setQuizResult] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const storedQuizzes = getQuizzes();
-    setQuizzes(storedQuizzes);
+    const fetchQuizzes = async () => {
+      setLoading(true);
+      const storedQuizzes = await getQuizzes();
+      setQuizzes(storedQuizzes);
+      setLoading(false);
+    };
+    fetchQuizzes();
   }, []);
 
   const addQuiz = () => {
@@ -40,18 +48,22 @@ export const QuizManager: FC = () => {
   };
 
   const saveQuiz = (quiz: Quiz) => {
+    setLoading(true);
     const updatedQuizzes = quizzes.some(q => q.id === quiz.id)
       ? quizzes.map(q => (q.id === quiz.id ? quiz : q))
       : [...quizzes, quiz];
     setQuizzes(updatedQuizzes);
     saveQuizzes(updatedQuizzes);
+    setLoading(false);
     setEditingQuiz(null);
   };
 
   const deleteQuiz = (quizId: string) => {
+    setLoading(true);
     const updatedQuizzes = quizzes.filter(q => q.id !== quizId);
     setQuizzes(updatedQuizzes);
     saveQuizzes(updatedQuizzes);
+    setLoading(false);
   };
 
   const handleCompleteQuiz = (score: number) => {
@@ -62,12 +74,25 @@ export const QuizManager: FC = () => {
     }
   };
 
+  const handleBackToMain = () => {
+    setCompletedQuiz(null);
+    setQuizResult(null);
+  };
+
   return (
     <div>
-      {editingQuiz ? (
+      {loading ? (
+        <Loader />
+      ) : editingQuiz ? (
         <QuizEditor quiz={editingQuiz} saveQuiz={saveQuiz} />
       ) : runningQuiz ? (
         <QuizRunner quiz={runningQuiz} onComplete={handleCompleteQuiz} />
+      ) : completedQuiz && quizResult !== null ? (
+        <QuizResult
+          score={quizResult}
+          totalQuestions={completedQuiz.questions.length}
+          onBackToMain={handleBackToMain}
+        />
       ) : (
         <div>
           <button
@@ -77,7 +102,9 @@ export const QuizManager: FC = () => {
             Create new quiz
           </button>
           {quizzes.length === 0 ? (
-            <div>There are currently no quizzes</div>
+            <h3 className="text-xl font-bold">
+              There are currently no quizzes
+            </h3>
           ) : (
             <QuizList
               quizzes={quizzes}
@@ -85,14 +112,6 @@ export const QuizManager: FC = () => {
               deleteQuiz={deleteQuiz}
               runQuiz={setRunningQuiz}
             />
-          )}
-          {quizResult !== null && completedQuiz && (
-            <div className="mt-4">
-              <h3>
-                Quiz Completed! Your Score: {quizResult} /{' '}
-                {completedQuiz.questions.length}
-              </h3>
-            </div>
           )}
         </div>
       )}
