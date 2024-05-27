@@ -22,6 +22,7 @@ export const QuizManager: FC = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
   const [runningQuiz, setRunningQuiz] = useState<Quiz | null>(null);
+  const [completedQuiz, setCompletedQuiz] = useState<Quiz | null>(null);
   const [quizResult, setQuizResult] = useState<number | null>(null);
 
   useEffect(() => {
@@ -54,12 +55,13 @@ export const QuizManager: FC = () => {
   };
 
   const handleCompleteQuiz = (score: number) => {
-    setRunningQuiz(null);
-    setQuizResult(score);
+    if (runningQuiz) {
+      setCompletedQuiz(runningQuiz);
+      setRunningQuiz(null);
+      setQuizResult(score);
+    }
   };
 
-  const currentRunningQuiz = runningQuiz;
-  console.log(runningQuiz)
   return (
     <div>
       {editingQuiz ? (
@@ -70,7 +72,7 @@ export const QuizManager: FC = () => {
         <div>
           <button
             onClick={addQuiz}
-            className="mb-4 h-12 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+            className="mb-8 font-medium h-12 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
           >
             Create new quiz
           </button>
@@ -84,11 +86,11 @@ export const QuizManager: FC = () => {
               runQuiz={setRunningQuiz}
             />
           )}
-          {quizResult !== null && currentRunningQuiz && (
+          {quizResult !== null && completedQuiz && (
             <div className="mt-4">
               <h3>
                 Quiz Completed! Your Score: {quizResult} /{' '}
-                {currentRunningQuiz.questions.length}
+                {completedQuiz.questions.length}
               </h3>
             </div>
           )}
