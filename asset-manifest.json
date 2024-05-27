@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/luna-quiz/static/css/main.908f2637.css",
-    "main.js": "/luna-quiz/static/js/main.db4a8a04.js",
+    "main.css": "/luna-quiz/static/css/main.92a83d0c.css",
+    "main.js": "/luna-quiz/static/js/main.879b7211.js",
     "index.html": "/luna-quiz/index.html",
     "static/media/sprite.svg": "/luna-quiz/static/media/sprite.6bd84d59ab606727eabee111ba87f27f.svg",
-    "main.908f2637.css.map": "/luna-quiz/static/css/main.908f2637.css.map",
-    "main.db4a8a04.js.map": "/luna-quiz/static/js/main.db4a8a04.js.map"
+    "main.92a83d0c.css.map": "/luna-quiz/static/css/main.92a83d0c.css.map",
+    "main.879b7211.js.map": "/luna-quiz/static/js/main.879b7211.js.map"
   },
   "entrypoints": [
-    "static/css/main.908f2637.css",
-    "static/js/main.db4a8a04.js"
+    "static/css/main.92a83d0c.css",
+    "static/js/main.879b7211.js"
   ]
 }
