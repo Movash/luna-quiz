@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { Quiz } from '../QuizManager/QuizManager';
 
 interface QuizRunnerProps {
@@ -6,7 +6,7 @@ interface QuizRunnerProps {
   onComplete: (score: number) => void;
 }
 
-export const QuizRunner: React.FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
+export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
@@ -36,28 +36,46 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
   };
 
   return (
-    <div>
-      <h2>{quiz.title}</h2>
+    <div className="mx-auto flex flex-col gap-2 p-4 border rounded-xl bg-slate-100 w-[500px]">
+      <h2 className="font-medium text-xl">{quiz.title}</h2>
       {currentQuestion ? (
-        <div>
-          <h3>{currentQuestion.questionText}</h3>
-          {currentQuestion.answers.map((answer, index) => (
-            <div key={index}>
-              <input
-                type="radio"
-                name={`question-${currentQuestion.id}`}
-                checked={selectedAnswers[currentQuestionIndex] === index}
-                onChange={() => handleAnswerSelect(index)}
-              />
-              {answer}
-            </div>
-          ))}
+        <div className="flex flex-col items-center gap-2">
+          <h3 className="font-medium text-lg">
+            {currentQuestion.questionText}
+          </h3>
+          <div className="w-full">
+            {currentQuestion.answers.map((answer, index) => (
+              <div
+                key={index}
+                className="bg-violet-300 flex m-1 p-2 border rounded-xl transition duration-300 ease-in-out transform hover:bg-amber-500"
+                onClick={() => handleAnswerSelect(index)}
+              >
+                <input
+                  type="radio"
+                  name={`question-${currentQuestion.id}`}
+                  checked={selectedAnswers[currentQuestionIndex] === index}
+                  onChange={e => {
+                    e.stopPropagation();
+                    handleAnswerSelect(index);
+                  }}
+                  className="mr-2"
+                />
+                <p className="text-lg">{answer}</p>
+              </div>
+            ))}
+          </div>
           {currentQuestionIndex < quiz.questions.length - 1 ? (
-            <button onClick={handleNextQuestion} className="btn">
+            <button
+              onClick={handleNextQuestion}
+              className="font-medium h-10 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+            >
               Next
             </button>
           ) : (
-            <button onClick={handleFinishQuiz} className="btn">
+            <button
+              onClick={handleFinishQuiz}
+              className="font-medium h-10 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+            >
               Finish
             </button>
           )}
