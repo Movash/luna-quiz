@@ -37,6 +37,9 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
 
   return (
     <div className="mx-auto flex flex-col gap-2 p-4 border rounded-xl bg-slate-100 w-[500px]">
+      <p className="absolute">
+        Question {currentQuestionIndex + 1} of {quiz.questions.length}
+      </p>
       <h2 className="font-medium text-xl">{quiz.title}</h2>
       {currentQuestion ? (
         <div className="flex flex-col items-center gap-2">
