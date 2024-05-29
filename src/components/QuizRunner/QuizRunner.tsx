@@ -7,7 +7,7 @@ interface QuizRunnerProps {
 }
 
 export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
