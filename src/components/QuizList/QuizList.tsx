@@ -15,11 +15,11 @@ export const QuizList: FC<QuizListProps> = ({
   runQuiz,
 }) => {
   return (
-    <div className='flex flex-wrap gap-4'>
+    <div className='flex flex-wrap gap-4 justify-center'>
       {quizzes.map(quiz => (
         <div
           key={quiz.id}
-          className="mx-auto p-4 border rounded-xl bg-slate-100 w-[300px]"
+          className="p-4 border rounded-xl bg-slate-100 w-[300px]"
         >
           <h2 className="text-xl font-bold mb-4">{quiz.title}</h2>
           <button
