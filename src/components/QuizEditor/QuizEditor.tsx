@@ -75,7 +75,12 @@ export const QuizEditor: FC<QuizEditorProps> = ({ quiz, saveQuiz }) => {
         </button>
         <button
           onClick={save}
-          className="font-medium h-12 w-28 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+          disabled={!currentQuiz.title || currentQuiz.questions.length < 1}
+          className={`font-medium h-12 w-28 text-white rounded-lg transition duration-300 ease-in-out transform ${
+            !currentQuiz.title || currentQuiz.questions.length < 1
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-700'
+          }`}
         >
           Save quiz
         </button>
