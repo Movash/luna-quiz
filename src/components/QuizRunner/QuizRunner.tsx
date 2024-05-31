@@ -35,6 +35,8 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
     onComplete(score);
   };
 
+  const isAnswerSelected = selectedAnswers[currentQuestionIndex] !== undefined;
+
   return (
     <div className="mx-auto flex flex-col gap-2 p-4 border rounded-xl bg-slate-100 w-[500px]">
       <p className="absolute">
@@ -70,14 +72,24 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onComplete }) => {
           {currentQuestionIndex < quiz.questions.length - 1 ? (
             <button
               onClick={handleNextQuestion}
-              className="font-medium h-10 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+              className={`font-medium h-10 w-48 text-white rounded-lg transition duration-300 ease-in-out transform ${
+                isAnswerSelected
+                  ? 'bg-blue-500 hover:bg-blue-700'
+                  : 'bg-gray-400 cursor-not-allowed'
+              }`}
+              disabled={!isAnswerSelected}
             >
               Next
             </button>
           ) : (
             <button
               onClick={handleFinishQuiz}
-              className="font-medium h-10 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+              className={`font-medium h-10 w-48 text-white rounded-lg transition duration-300 ease-in-out transform ${
+                isAnswerSelected
+                  ? 'bg-blue-500 hover:bg-blue-700'
+                  : 'bg-gray-400 cursor-not-allowed'
+              }`}
+              disabled={!isAnswerSelected}
             >
               Finish
             </button>
