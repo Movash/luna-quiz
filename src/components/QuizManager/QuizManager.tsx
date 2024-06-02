@@ -77,6 +77,8 @@ export const QuizManager: FC = () => {
   const handleBackToMain = () => {
     setCompletedQuiz(null);
     setQuizResult(null);
+    setRunningQuiz(null);
+    setEditingQuiz(null);
   };
 
   return (
@@ -84,9 +86,17 @@ export const QuizManager: FC = () => {
       {loading ? (
         <Loader />
       ) : editingQuiz ? (
-        <QuizEditor quiz={editingQuiz} saveQuiz={saveQuiz} />
+        <QuizEditor
+          quiz={editingQuiz}
+          saveQuiz={saveQuiz}
+          onBackToMain={handleBackToMain}
+        />
       ) : runningQuiz ? (
-        <QuizRunner quiz={runningQuiz} onComplete={handleCompleteQuiz} />
+        <QuizRunner
+          quiz={runningQuiz}
+          onComplete={handleCompleteQuiz}
+          onBackToMain={handleBackToMain}
+        />
       ) : completedQuiz && quizResult !== null ? (
         <QuizResult
           score={quizResult}
