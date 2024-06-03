@@ -18,7 +18,7 @@ export const QuizResult: FC<QuizResultProps> = ({
       </h2>
       <button
         onClick={onBackToMain}
-        className="h-12 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
+        className="font-medium h-12 w-48 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700"
       >
         Back to Main
       </button>
