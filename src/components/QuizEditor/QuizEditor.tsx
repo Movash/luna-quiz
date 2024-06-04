@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Quiz, Question } from '../QuizManager/QuizManager';
 import { QuestionEditor } from '../QuestionEditor/QuestionEditor';
 import { nanoid } from 'nanoid';
@@ -9,8 +9,13 @@ interface QuizEditorProps {
   onBackToMain: () => void;
 }
 
-export const QuizEditor: FC<QuizEditorProps> = ({ quiz, saveQuiz, onBackToMain }) => {
+export const QuizEditor: FC<QuizEditorProps> = ({
+  quiz,
+  saveQuiz,
+  onBackToMain,
+}) => {
   const [currentQuiz, setCurrentQuiz] = useState<Quiz>(quiz);
+  const [canSave, setCanSave] = useState<boolean>(false);
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentQuiz({ ...currentQuiz, title: e.target.value });
@@ -44,6 +49,27 @@ export const QuizEditor: FC<QuizEditorProps> = ({ quiz, saveQuiz, onBackToMain }
   const save = () => {
     saveQuiz(currentQuiz);
   };
+
+  useEffect(() => {
+    const validateQuiz = () => {
+      if (!currentQuiz.title) return false;
+      if (currentQuiz.questions.length < 1) return false;
+
+      return currentQuiz.questions.every(question => {
+        if (!question.questionText) return false;
+        if (question.answers.length < 2) return false;
+        if (question.answers.some(answer => !answer)) return false;
+        if (
+          question.correctAnswerIndex < 0 ||
+          question.correctAnswerIndex >= question.answers.length
+        )
+          return false;
+        return true;
+      });
+    };
+
+    setCanSave(validateQuiz());
+  }, [currentQuiz]);
 
   return (
     <>
@@ -85,9 +111,10 @@ export const QuizEditor: FC<QuizEditorProps> = ({ quiz, saveQuiz, onBackToMain }
           </button>
           <button
             onClick={save}
-            disabled={!currentQuiz.title || currentQuiz.questions.length < 1}
+            disabled={!canSave}
             className={`font-medium h-12 w-28 text-white rounded-lg transition duration-300 ease-in-out transform ${
-              !currentQuiz.title || currentQuiz.questions.length < 1
+              //
+              !canSave
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-500 hover:bg-blue-700'
             }`}
