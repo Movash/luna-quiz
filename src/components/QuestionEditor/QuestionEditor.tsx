@@ -31,8 +31,25 @@ export const QuestionEditor: FC<QuestionEditorProps> = ({
   };
 
   const removeAnswer = (index: number) => {
-    const updatedAnswers = question.answers.filter((_, i) => i !== index);
-    onChange({ ...question, answers: updatedAnswers });
+    let updatedAnswers = question.answers.filter((_, i) => i !== index);
+    let updatedCorrectAnswerIndex = question.correctAnswerIndex;
+
+    if (index === question.correctAnswerIndex) {
+      updatedCorrectAnswerIndex = 0;
+    } else if (index < question.correctAnswerIndex) {
+      updatedCorrectAnswerIndex -= 1;
+    }
+
+    if (updatedAnswers.length === 0) {
+      updatedAnswers = [''];
+      updatedCorrectAnswerIndex = 0;
+    }
+
+    onChange({
+      ...question,
+      answers: updatedAnswers,
+      correctAnswerIndex: updatedCorrectAnswerIndex,
+    });
   };
 
   const handleCorrectAnswerChange = (index: number) => {
